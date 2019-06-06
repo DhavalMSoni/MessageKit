@@ -26,6 +26,7 @@ import UIKit
 
 /// An object is responsible for
 /// sizing and configuring cells for given `IndexPath`s.
+//5555
 open class CellSizeCalculator {
 
     /// The layout object for which the cell size calculator is used.

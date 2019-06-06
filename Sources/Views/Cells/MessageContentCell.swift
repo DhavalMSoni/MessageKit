@@ -90,10 +90,10 @@ open class MessageContentCell: MessageCollectionViewCell {
         contentView.addSubview(accessoryView)
         contentView.addSubview(cellTopLabel)
         contentView.addSubview(messageTopLabel)
-        contentView.addSubview(messageBottomLabel)
         contentView.addSubview(cellBottomLabel)
         contentView.addSubview(messageContainerView)
         contentView.addSubview(avatarView)
+        contentView.addSubview(messageBottomLabel)
     }
 
     open override func prepareForReuse() {
@@ -300,9 +300,10 @@ open class MessageContentCell: MessageCollectionViewCell {
         messageBottomLabel.textAlignment = attributes.messageBottomLabelAlignment.textAlignment
         messageBottomLabel.textInsets = attributes.messageBottomLabelAlignment.textInsets
 
-        let y = messageContainerView.frame.maxY + attributes.messageContainerPadding.bottom
+        let y = messageContainerView.frame.maxY + attributes.messageContainerPadding.bottom -
+        25
         let origin = CGPoint(x: 0, y: y)
-
+attributes.messageBottomLabelSize.width = attributes.messageBottomLabelSize.width
         messageBottomLabel.frame = CGRect(origin: origin, size: attributes.messageBottomLabelSize)
     }
 

@@ -62,8 +62,8 @@ open class TextMessageSizeCalculator: MessageSizeCalculator {
 
         let messageInsets = messageLabelInsets(for: message)
         messageContainerSize.width += messageInsets.horizontal
-        messageContainerSize.height += messageInsets.vertical
-
+        messageContainerSize.height += messageInsets.vertical+15
+        messageContainerSize.width = max(messageContainerSize.width,100 )
         return messageContainerSize
     }
 

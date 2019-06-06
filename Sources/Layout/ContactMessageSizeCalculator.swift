@@ -59,7 +59,7 @@ open class ContactMessageSizeCalculator: MessageSizeCalculator {
         
         let messageInsets = contactLabelInsets(for: message)
         messageContainerSize.width += messageInsets.horizontal
-        messageContainerSize.height += messageInsets.vertical
+        messageContainerSize.height += messageInsets.vertical + 20
         
         return messageContainerSize
     }

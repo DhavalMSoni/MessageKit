@@ -102,7 +102,7 @@ open class MessageSizeCalculator: CellSizeCalculator {
 
         let messageContainerHeight = messageContainerSize(for: message).height
         let cellBottomLabelHeight = cellBottomLabelSize(for: message, at: indexPath).height
-        let messageBottomLabelHeight = messageBottomLabelSize(for: message, at: indexPath).height
+        let messageBottomLabelHeight: CGFloat = 0.0//messageBottomLabelSize(for: message, at: indexPath).height
         let cellTopLabelHeight = cellTopLabelSize(for: message, at: indexPath).height
         let messageTopLabelHeight = messageTopLabelSize(for: message, at: indexPath).height
         let messageVerticalPadding = messageContainerPadding(for: message).vertical

@@ -150,7 +150,7 @@ final class AutocompleteExampleViewController: ChatViewController {
             .configure {
                 $0.spacing = .fixed(10)
                 $0.image = UIImage(named: named)?.withRenderingMode(.alwaysTemplate)
-                $0.setSize(CGSize(width: 25, height: 25), animated: false)
+                $0.setSize(CGSize(width: 40, height: 40), animated: false)
                 $0.tintColor = UIColor(white: 0.8, alpha: 1)
             }.onSelected {
                 $0.tintColor = .primaryColor
@@ -358,7 +358,7 @@ extension AutocompleteExampleViewController: MessagesLayoutDelegate {
     }
 
     func messageBottomLabelHeight(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> CGFloat {
-        return (!isNextMessageSameSender(at: indexPath) && isFromCurrentSender(message: message)) ? 16 : 0
+        return (!isNextMessageSameSender(at: indexPath) && isFromCurrentSender(message: message)) ? 15 : 0
     }
 
 }

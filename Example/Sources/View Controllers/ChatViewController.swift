@@ -110,6 +110,7 @@ class ChatViewController: MessagesViewController, MessagesDataSource {
     
     func configureMessageInputBar() {
         messageInputBar.delegate = self
+        messageInputBar.inputTextView.placeholder = "Write somting here..."
         messageInputBar.inputTextView.tintColor = .primaryColor
         messageInputBar.sendButton.setTitleColor(.primaryColor, for: .normal)
         messageInputBar.sendButton.setTitleColor(

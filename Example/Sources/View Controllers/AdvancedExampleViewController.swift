@@ -86,7 +86,7 @@ final class AdvancedExampleViewController: ChatViewController {
         // Hide the outgoing avatar and adjust the label alignment to line up with the messages
         layout?.setMessageOutgoingAvatarSize(.zero)
         layout?.setMessageOutgoingMessageTopLabelAlignment(LabelAlignment(textAlignment: .right, textInsets: UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 8)))
-        layout?.setMessageOutgoingMessageBottomLabelAlignment(LabelAlignment(textAlignment: .right, textInsets: UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 8)))
+        layout?.setMessageOutgoingMessageBottomLabelAlignment(LabelAlignment(textAlignment: .right, textInsets: UIEdgeInsets(top: 5, left: 0, bottom: 5, right: 20)))
 
         // Set outgoing avatar to overlap with the message bubble
         layout?.setMessageIncomingMessageTopLabelAlignment(LabelAlignment(textAlignment: .left, textInsets: UIEdgeInsets(top: 0, left: 18, bottom: outgoingAvatarOverlap, right: 0)))
@@ -122,46 +122,58 @@ final class AdvancedExampleViewController: ChatViewController {
     }
 
     private func configureInputBarItems() {
-        messageInputBar.setRightStackViewWidthConstant(to: 36, animated: false)
+        messageInputBar.setRightStackViewWidthConstant(to: 150, animated: false)
         messageInputBar.sendButton.imageView?.backgroundColor = UIColor(white: 0.85, alpha: 1)
-        messageInputBar.sendButton.contentEdgeInsets = UIEdgeInsets(top: 2, left: 2, bottom: 2, right: 2)
-        messageInputBar.sendButton.setSize(CGSize(width: 36, height: 36), animated: false)
-        messageInputBar.sendButton.image = #imageLiteral(resourceName: "ic_up")
+        
+        messageInputBar.sendButton.setSize(CGSize(width: 30, height: 30), animated: false)
+      messageInputBar.sendButton.image = #imageLiteral(resourceName: "ic_up")
         messageInputBar.sendButton.title = nil
-        messageInputBar.sendButton.imageView?.layer.cornerRadius = 16
-        messageInputBar.middleContentViewPadding.right = -38
-        let charCountButton = InputBarButtonItem()
-            .configure {
-                $0.title = "0/140"
-                $0.contentHorizontalAlignment = .right
-                $0.setTitleColor(UIColor(white: 0.6, alpha: 1), for: .normal)
-                $0.titleLabel?.font = UIFont.systemFont(ofSize: 10, weight: .bold)
-                $0.setSize(CGSize(width: 50, height: 25), animated: false)
-            }.onTextViewDidChange { (item, textView) in
-                item.title = "\(textView.text.count)/140"
-                let isOverLimit = textView.text.count > 140
-                item.inputBarAccessoryView?.shouldManageSendButtonEnabledState = !isOverLimit // Disable automated management when over limit
-                if isOverLimit {
-                    item.inputBarAccessoryView?.sendButton.isEnabled = false
-                }
-                let color = isOverLimit ? .red : UIColor(white: 0.6, alpha: 1)
-                item.setTitleColor(color, for: .normal)
-        }
-        let bottomItems = [.flexibleSpace, charCountButton]
-        messageInputBar.middleContentViewPadding.bottom = 8
-        messageInputBar.setStackViewItems(bottomItems, forStack: .bottom, animated: false)
-
+        messageInputBar.sendButton.imageView?.layer.cornerRadius = 15
+        messageInputBar.middleContentViewPadding.right = -115
+        messageInputBar.rightStackView.alignment = .center
+        messageInputBar.rightStackView.distribution = .equalCentering
+        messageInputBar.rightStackView.spacing = 5
         // This just adds some more flare
-        messageInputBar.sendButton
-            .onEnabled { item in
-                UIView.animate(withDuration: 0.3, animations: {
-                    item.imageView?.backgroundColor = .primaryColor
-                })
-            }.onDisabled { item in
-                UIView.animate(withDuration: 0.3, animations: {
-                    item.imageView?.backgroundColor = UIColor(white: 0.85, alpha: 1)
-                })
-        }
+        
+        
+        let items = [
+            makeButton(named: "ic_library")
+                .configure {
+                    $0.setSize(CGSize(width: 30, height: 30), animated: false)
+                }
+                .onSelected {
+                    $0.tintColor = UIColor(red: 15/255, green: 135/255, blue: 255/255, alpha: 1.0)
+                    let imagePicker = UIImagePickerController()
+                    //  imagePicker.delegate = self
+                    imagePicker.sourceType = .photoLibrary
+                    (UIApplication.shared.delegate as? AppDelegate)?.window?.rootViewController?.present(imagePicker, animated: true, completion: nil)
+            },
+            makeButton(named: "ic_mic").onSelected {
+                $0.tintColor = UIColor(red: 15/255, green: 135/255, blue: 255/255, alpha: 1.0)
+                }.configure {
+                    $0.setSize(CGSize(width: 30, height: 30), animated: false)
+            },
+            makeButton(named: "ic_camera").configure {
+                    $0.setSize(CGSize(width: 30, height: 30), animated: false)
+                }.onSelected {
+                    $0.tintColor = UIColor(red: 15/255, green: 135/255, blue: 255/255, alpha: 1.0)
+            },
+            .fixedSpace(5),
+            messageInputBar.sendButton
+                .onEnabled { item in
+                    UIView.animate(withDuration: 0.3, animations: {
+                        item.imageView?.backgroundColor = .primaryColor
+                    })
+                }.onDisabled { item in
+                    UIView.animate(withDuration: 0.3, animations: {
+                        item.imageView?.backgroundColor = UIColor(white: 0.85, alpha: 1)
+                    })
+            }
+        ]
+//        items.forEach { $0.tintColor = .lightGray }
+      
+        messageInputBar.setStackViewItems(items, forStack: .right, animated: false)
+        
     }
     
     // MARK: - Helpers
@@ -192,9 +204,9 @@ final class AdvancedExampleViewController: ChatViewController {
     private func makeButton(named: String) -> InputBarButtonItem {
         return InputBarButtonItem()
             .configure {
-                $0.spacing = .fixed(10)
+                $0.spacing = .none
                 $0.image = UIImage(named: named)?.withRenderingMode(.alwaysTemplate)
-                $0.setSize(CGSize(width: 25, height: 25), animated: false)
+                $0.setSize(CGSize(width: 40, height: 40), animated: false)
                 $0.tintColor = UIColor(white: 0.8, alpha: 1)
             }.onSelected {
                 $0.tintColor = .primaryColor
@@ -255,8 +267,11 @@ final class AdvancedExampleViewController: ChatViewController {
 
     override func messageBottomLabelAttributedText(for message: MessageType, at indexPath: IndexPath) -> NSAttributedString? {
 
-        if !isNextMessageSameSender(at: indexPath) && isFromCurrentSender(message: message) {
-            return NSAttributedString(string: "Delivered", attributes: [NSAttributedString.Key.font: UIFont.preferredFont(forTextStyle: .caption1)])
+        if isFromCurrentSender(message: message) {
+            let tick =  NSMutableAttributedString(string: "2:50 am", attributes: [NSAttributedString.Key.font: UIFont.preferredFont(forTextStyle: .caption1), NSAttributedString.Key.foregroundColor: UIColor.white])
+            tick.append(NSAttributedString(string: "✓✓", attributes: [NSAttributedString.Key.font: UIFont.preferredFont(forTextStyle: .caption1),  .kern: -6, NSAttributedString.Key.foregroundColor: UIColor.white]))
+            
+            return tick
         }
         return nil
     }
@@ -410,7 +425,7 @@ extension AdvancedExampleViewController: MessagesLayoutDelegate {
     }
 
     func messageBottomLabelHeight(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> CGFloat {
-        return (!isNextMessageSameSender(at: indexPath) && isFromCurrentSender(message: message)) ? 16 : 0
+        return ( isFromCurrentSender(message: message)) ? 25 : 0
     }
 
 }
