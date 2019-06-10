@@ -37,8 +37,32 @@ final class AdvancedExampleViewController: ChatViewController {
         super.viewDidLoad()
         
         updateTitleView(title: "MessageKit", subtitle: "2 Online")
+        let customMenuItem = UIMenuItem(title: "Quote", action: #selector(MessageCollectionViewCell.quote(_:)))
+        UIMenuController.shared.menuItems = [customMenuItem]
+    }
+    override func collectionView(_ collectionView: UICollectionView, canPerformAction action: Selector, forItemAt indexPath: IndexPath, withSender sender: Any?) -> Bool {
+        
+        if action == NSSelectorFromString("delete:") {
+            return true
+        } else if action == NSSelectorFromString("quote:") {
+            return true
+        }else {
+            return super.collectionView(collectionView, canPerformAction: action, forItemAt: indexPath, withSender: sender)
+        }
     }
     
+    override func collectionView(_ collectionView: UICollectionView, performAction action: Selector, forItemAt indexPath: IndexPath, withSender sender: Any?) {
+        
+        if action == NSSelectorFromString("delete:") {
+            // 1.) Remove from datasource
+            // insert your code here
+            
+            // 2.) Delete sections
+//            collectionView.deleteSections([indexPath.section])
+        } else {
+            super.collectionView(collectionView, performAction: action, forItemAt: indexPath, withSender: sender)
+        }
+    }
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
@@ -87,7 +111,7 @@ final class AdvancedExampleViewController: ChatViewController {
         layout?.setMessageOutgoingAvatarSize(.zero)
         layout?.setMessageOutgoingMessageTopLabelAlignment(LabelAlignment(textAlignment: .right, textInsets: UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 8)))
         layout?.setMessageOutgoingMessageBottomLabelAlignment(LabelAlignment(textAlignment: .right, textInsets: UIEdgeInsets(top: 5, left: 0, bottom: 5, right: 20)))
-
+layout?.setMessageIncomingMessageBottomLabelAlignment(LabelAlignment(textAlignment: .right, textInsets: UIEdgeInsets(top: 5, left: 0, bottom: 5, right: 20)))
         // Set outgoing avatar to overlap with the message bubble
         layout?.setMessageIncomingMessageTopLabelAlignment(LabelAlignment(textAlignment: .left, textInsets: UIEdgeInsets(top: 0, left: 18, bottom: outgoingAvatarOverlap, right: 0)))
         layout?.setMessageIncomingAvatarSize(CGSize(width: 30, height: 30))
@@ -193,7 +217,7 @@ final class AdvancedExampleViewController: ChatViewController {
     }
     
     func setTypingIndicatorViewHidden(_ isHidden: Bool, performUpdates updates: (() -> Void)? = nil) {
-        updateTitleView(title: "MessageKit", subtitle: isHidden ? "2 Online" : "Typing...")
+//        updateTitleView(title: "MessageKit", subtitle: isHidden ? "2 Online" : "Typing...")
         setTypingIndicatorViewHidden(isHidden, animated: true, whilePerforming: updates) { [weak self] success in
             if success, self?.isLastSectionVisible() == true {
                 self?.messagesCollectionView.scrollToBottom(animated: true)
@@ -272,6 +296,8 @@ final class AdvancedExampleViewController: ChatViewController {
             tick.append(NSAttributedString(string: "✓✓", attributes: [NSAttributedString.Key.font: UIFont.preferredFont(forTextStyle: .caption1),  .kern: -6, NSAttributedString.Key.foregroundColor: UIColor.white]))
             
             return tick
+        }else{
+            return NSMutableAttributedString(string: "2:50 am", attributes: [NSAttributedString.Key.font: UIFont.preferredFont(forTextStyle: .caption1), NSAttributedString.Key.foregroundColor: UIColor.gray])
         }
         return nil
     }
@@ -425,7 +451,34 @@ extension AdvancedExampleViewController: MessagesLayoutDelegate {
     }
 
     func messageBottomLabelHeight(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> CGFloat {
-        return ( isFromCurrentSender(message: message)) ? 25 : 0
+        return 25
     }
 
+}
+extension MessageCollectionViewCell {
+    
+    override open func delete(_ sender: Any?) {
+        
+        // Get the collectionView
+        if let collectionView = self.superview as? UICollectionView {
+            // Get indexPath
+            if let indexPath = collectionView.indexPath(for: self) {
+                // Trigger action
+                collectionView.delegate?.collectionView?(collectionView, performAction: NSSelectorFromString("delete:"), forItemAt: indexPath, withSender: sender)
+            }
+        }
+    }
+}
+extension MessageCollectionViewCell {
+    @objc func quote(_ sender: Any?) {
+        
+        // Get the collectionView
+        if let collectionView = self.superview as? UICollectionView {
+            // Get indexPath
+            if let indexPath = collectionView.indexPath(for: self) {
+                // Trigger action
+                collectionView.delegate?.collectionView?(collectionView, performAction: #selector(MessageCollectionViewCell.quote(_:)), forItemAt: indexPath, withSender: sender)
+            }
+        }
+    }
 }

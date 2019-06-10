@@ -33,7 +33,7 @@ extension UIViewController {
         titleLabel.textColor = baseColor
         titleLabel.font = UIFont.systemFont(ofSize: 15)
         titleLabel.text = title
-        titleLabel.textAlignment = .center
+        titleLabel.textAlignment = .left
         titleLabel.adjustsFontSizeToFitWidth = true
         titleLabel.sizeToFit()
         
@@ -60,8 +60,10 @@ extension UIViewController {
             let newX = widthDiff / 2
             titleLabel.frame.origin.x = newX
         }
-        
-        navigationItem.titleView = titleView
+        navigationItem.leftBarButtonItem = UIBarButtonItem(customView: titleView)
+        self.navigationItem.leftItemsSupplementBackButton = true
+        navigationItem.rightBarButtonItems = [UIBarButtonItem(title: "55", style: .plain, target: self, action: nil),UIBarButtonItem(title: "56", style: .plain, target: self, action: nil)]
+//        navigationItem.titleView = titleView
     }
     
 }

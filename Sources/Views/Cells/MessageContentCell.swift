@@ -302,8 +302,9 @@ open class MessageContentCell: MessageCollectionViewCell {
 
         let y = messageContainerView.frame.maxY + attributes.messageContainerPadding.bottom -
         25
-        let origin = CGPoint(x: 0, y: y)
-attributes.messageBottomLabelSize.width = attributes.messageBottomLabelSize.width
+        let origin = CGPoint(x: messageContainerView.frame.origin.x, y: y)
+//attributes.messageBottomLabelSize.width = attributes.messageBottomLabelSize.width
+        attributes.messageBottomLabelSize.width = messageContainerView.frame.size.width
         messageBottomLabel.frame = CGRect(origin: origin, size: attributes.messageBottomLabelSize)
     }
 
