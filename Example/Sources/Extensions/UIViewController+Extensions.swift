@@ -62,7 +62,7 @@ extension UIViewController {
         }
         navigationItem.leftBarButtonItem = UIBarButtonItem(customView: titleView)
         self.navigationItem.leftItemsSupplementBackButton = true
-        navigationItem.rightBarButtonItems = [UIBarButtonItem(title: "55", style: .plain, target: self, action: nil),UIBarButtonItem(title: "56", style: .plain, target: self, action: nil)]
+       
 //        navigationItem.titleView = titleView
     }
     

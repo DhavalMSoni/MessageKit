@@ -50,10 +50,27 @@ final class AdvancedExampleViewController: ChatViewController {
             return super.collectionView(collectionView, canPerformAction: action, forItemAt: indexPath, withSender: sender)
         }
     }
-    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        print("didSelectItemAt")
+    }
     override func collectionView(_ collectionView: UICollectionView, performAction action: Selector, forItemAt indexPath: IndexPath, withSender sender: Any?) {
         
         if action == NSSelectorFromString("delete:") {
+            self.allowDelete = true
+            
+//
+//                self.messagesCollectionView.performBatchUpdates({
+//                    self.messagesCollectionView.reloadSections(IndexSet(integersIn:
+//                        0...self.messageList.count - 1))
+//                }, completion: { [weak self] _ in
+//                    self!.messagesCollectionView.layoutSubviews()
+//                    self!.messagesCollectionView.layoutIfNeeded()
+                    DispatchQueue.main.async {
+                        self.messagesCollectionView.reloadData()
+                    }
+//                })
+//
+            
             // 1.) Remove from datasource
             // insert your code here
             
@@ -63,9 +80,16 @@ final class AdvancedExampleViewController: ChatViewController {
             super.collectionView(collectionView, performAction: action, forItemAt: indexPath, withSender: sender)
         }
     }
+//    override func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+//        attributes.avatarSize.width + attributes.messageContainerPadding.left + avatarPadding
+//        if allowDelete == true {
+//            
+//            (cell as? MessageContentCell)?.messageContainerView.frame.origin.x += ((cell as? MessageContentCell)?.messageContainerView.frame.origin.x)! + 45
+//        }
+//    }
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        
+         navigationItem.rightBarButtonItems = [UIBarButtonItem(title: "55", style: .plain, target: self, action: nil),UIBarButtonItem(title: "56", style: .plain, target: self, action: #selector(rightButtonAction))]
         MockSocket.shared.connect(with: [SampleData.shared.nathan, SampleData.shared.wu])
             .onTypingStatus { [weak self] in
                 self?.setTypingIndicatorViewHidden(false)
@@ -75,7 +99,17 @@ final class AdvancedExampleViewController: ChatViewController {
                 })
         }
     }
-    
+    @objc func rightButtonAction(){
+        let add = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: nil)
+        let spacer = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
+        setToolbarItems([add,spacer], animated: true)
+//        toolbarItems = [add,spacer]
+        messageInputBar.isHidden = true
+//        UIView.animate(withDuration: 3) {
+        
+            self.navigationController?.setToolbarHidden(false, animated: true)
+//        }
+    }
     override func loadFirstMessages() {
         DispatchQueue.global(qos: .userInitiated).async {
             let count = UserDefaults.standard.mockMessagesCount()
@@ -119,7 +153,7 @@ layout?.setMessageIncomingMessageBottomLabelAlignment(LabelAlignment(textAlignme
         
         layout?.setMessageIncomingAccessoryViewSize(CGSize(width: 30, height: 30))
         layout?.setMessageIncomingAccessoryViewPadding(HorizontalEdgeInsets(left: 8, right: 0))
-        layout?.setMessageIncomingAccessoryViewPosition(.messageBottom)
+        layout?.setMessageIncomingAccessoryViewPosition(.messageCenter)
         layout?.setMessageOutgoingAccessoryViewSize(CGSize(width: 30, height: 30))
         layout?.setMessageOutgoingAccessoryViewPadding(HorizontalEdgeInsets(left: 0, right: 8))
 
@@ -218,11 +252,11 @@ layout?.setMessageIncomingMessageBottomLabelAlignment(LabelAlignment(textAlignme
     
     func setTypingIndicatorViewHidden(_ isHidden: Bool, performUpdates updates: (() -> Void)? = nil) {
 //        updateTitleView(title: "MessageKit", subtitle: isHidden ? "2 Online" : "Typing...")
-        setTypingIndicatorViewHidden(isHidden, animated: true, whilePerforming: updates) { [weak self] success in
-            if success, self?.isLastSectionVisible() == true {
-                self?.messagesCollectionView.scrollToBottom(animated: true)
-            }
-        }
+//        setTypingIndicatorViewHidden(isHidden, animated: true, whilePerforming: updates) { [weak self] success in
+//            if success, self?.isLastSectionVisible() == true {
+//                self?.messagesCollectionView.scrollToBottom(animated: true)
+//            }
+//        }
     }
     
     private func makeButton(named: String) -> InputBarButtonItem {
@@ -384,15 +418,20 @@ extension AdvancedExampleViewController: MessagesDisplayDelegate {
         accessoryView.backgroundColor = .clear
 
         let shouldShow = Int.random(in: 0...10) == 0
-        guard shouldShow else { return }
+        guard allowDelete else { return }
 
         let button = UIButton(type: .infoLight)
         button.tintColor = .primaryColor
         accessoryView.addSubview(button)
-        button.frame = accessoryView.bounds
+        button.frame = .zero
+        UIView.animate(withDuration: 3) {
+            
+            button.frame = accessoryView.bounds
+        }
         button.isUserInteractionEnabled = false // respond to accessoryView tap through `MessageCellDelegate`
         accessoryView.layer.cornerRadius = accessoryView.frame.height / 2
         accessoryView.backgroundColor = UIColor.primaryColor.withAlphaComponent(0.3)
+        
     }
     
     // MARK: - Location Messages

@@ -29,7 +29,7 @@ open class MessageContentCell: MessageCollectionViewCell {
 
     /// The image view displaying the avatar.
     open var avatarView = AvatarView()
-
+open var allowDelete = false
     /// The container used for styling and holding the message's content view.
     open var messageContainerView: MessageContainerView = {
         let containerView = MessageContainerView()
@@ -255,13 +255,29 @@ open class MessageContentCell: MessageCollectionViewCell {
         switch attributes.avatarPosition.horizontal {
         case .cellLeading:
             origin.x = attributes.avatarSize.width + attributes.messageContainerPadding.left + avatarPadding
+            if self.allowDelete {
+//                DispatchQueue.main.asyncAfter(deadline: .now()+1, execute: {
+                    origin.x += 45
+                DispatchQueue.main.async {
+                    self.messageContainerView.frame = CGRect(origin: origin, size: attributes.messageContainerSize)
+                }
+                
+                
+//                })
+            }else{
+                self.messageContainerView.frame = CGRect(origin: origin, size: attributes.messageContainerSize)
+            }
         case .cellTrailing:
             origin.x = attributes.frame.width - attributes.avatarSize.width - attributes.messageContainerSize.width - attributes.messageContainerPadding.right - avatarPadding
+            self.messageContainerView.frame = CGRect(origin: origin, size: attributes.messageContainerSize)
         case .natural:
             fatalError(MessageKitError.avatarPositionUnresolved)
         }
-
-        messageContainerView.frame = CGRect(origin: origin, size: attributes.messageContainerSize)
+        
+      
+        
+        
+       
     }
 
     /// Positions the cell's top label.
@@ -339,7 +355,10 @@ open class MessageContentCell: MessageCollectionViewCell {
         case .natural:
             fatalError(MessageKitError.avatarPositionUnresolved)
         }
-
-        accessoryView.frame = CGRect(origin: origin, size: attributes.accessoryViewSize)
+origin.x = 5
+       
+            
+            self.accessoryView.frame = CGRect(origin: origin, size: attributes.accessoryViewSize)
+        
     }
 }
