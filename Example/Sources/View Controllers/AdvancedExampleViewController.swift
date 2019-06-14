@@ -57,7 +57,9 @@ final class AdvancedExampleViewController: ChatViewController {
         
         if action == NSSelectorFromString("delete:") {
             self.allowDelete = true
-            
+            DispatchQueue.main.async {
+                self.messagesCollectionView.reloadData()
+            }
 //
 //                self.messagesCollectionView.performBatchUpdates({
 //                    self.messagesCollectionView.reloadSections(IndexSet(integersIn:
@@ -65,9 +67,7 @@ final class AdvancedExampleViewController: ChatViewController {
 //                }, completion: { [weak self] _ in
 //                    self!.messagesCollectionView.layoutSubviews()
 //                    self!.messagesCollectionView.layoutIfNeeded()
-                    DispatchQueue.main.async {
-                        self.messagesCollectionView.reloadData()
-                    }
+            
 //                })
 //
             
@@ -102,11 +102,12 @@ final class AdvancedExampleViewController: ChatViewController {
     @objc func rightButtonAction(){
         let add = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: nil)
         let spacer = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
-        setToolbarItems([add,spacer], animated: true)
+        let texxt = UIBarButtonItem(title: "1 message selected", style: .plain, target: nil, action: nil)
+        setToolbarItems([add,spacer,texxt,spacer], animated: true)
 //        toolbarItems = [add,spacer]
-        messageInputBar.isHidden = true
 //        UIView.animate(withDuration: 3) {
         
+        messageInputBar.isHidden = true
             self.navigationController?.setToolbarHidden(false, animated: true)
 //        }
     }
@@ -417,7 +418,6 @@ extension AdvancedExampleViewController: MessagesDisplayDelegate {
         accessoryView.subviews.forEach { $0.removeFromSuperview() }
         accessoryView.backgroundColor = .clear
 
-        let shouldShow = Int.random(in: 0...10) == 0
         guard allowDelete else { return }
 
         let button = UIButton(type: .infoLight)

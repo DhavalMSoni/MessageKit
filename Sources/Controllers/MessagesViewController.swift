@@ -258,45 +258,50 @@ UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
     /// reserved for it with `isSectionReservedForTypingIndicator` defined in
     /// `MessagesCollectionViewFlowLayout`
     open func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-
+        
         guard let messagesCollectionView = collectionView as? MessagesCollectionView else {
             fatalError(MessageKitError.notMessagesCollectionView)
         }
-
+        
         guard let messagesDataSource = messagesCollectionView.messagesDataSource else {
             fatalError(MessageKitError.nilMessagesDataSource)
         }
-
+        
         if isSectionReservedForTypingIndicator(indexPath.section) {
             return messagesDataSource.typingIndicator(at: indexPath, in: messagesCollectionView)
         }
-
+        
         let message = messagesDataSource.messageForItem(at: indexPath, in: messagesCollectionView)
-
+        
         switch message.kind {
         case .text, .attributedText, .emoji:
             let cell = messagesCollectionView.dequeueReusableCell(TextMessageCell.self, for: indexPath)
             cell.allowDelete = self.allowDelete
             cell.configure(with: message, at: indexPath, and: messagesCollectionView)
+            cell.apply(self.messagesCollectionView.layoutAttributesForItem(at: indexPath) as! MessagesCollectionViewLayoutAttributes)
             return cell
         case .photo, .video:
             let cell = messagesCollectionView.dequeueReusableCell(MediaMessageCell.self, for: indexPath)
             cell.allowDelete = self.allowDelete
+            cell.apply(self.messagesCollectionView.layoutAttributesForItem(at: indexPath) as! MessagesCollectionViewLayoutAttributes)
             cell.configure(with: message, at: indexPath, and: messagesCollectionView)
             return cell
         case .location:
             let cell = messagesCollectionView.dequeueReusableCell(LocationMessageCell.self, for: indexPath)
             cell.allowDelete = self.allowDelete
+            cell.apply(self.messagesCollectionView.layoutAttributesForItem(at: indexPath) as! MessagesCollectionViewLayoutAttributes)
             cell.configure(with: message, at: indexPath, and: messagesCollectionView)
             return cell
         case .audio:
             let cell = messagesCollectionView.dequeueReusableCell(AudioMessageCell.self, for: indexPath)
             cell.allowDelete = self.allowDelete
+            cell.apply(self.messagesCollectionView.layoutAttributesForItem(at: indexPath) as! MessagesCollectionViewLayoutAttributes)
             cell.configure(with: message, at: indexPath, and: messagesCollectionView)
             return cell
         case .contact:
             let cell = messagesCollectionView.dequeueReusableCell(ContactMessageCell.self, for: indexPath)
             cell.allowDelete = self.allowDelete
+            cell.apply(self.messagesCollectionView.layoutAttributesForItem(at: indexPath) as! MessagesCollectionViewLayoutAttributes)
             cell.configure(with: message, at: indexPath, and: messagesCollectionView)
             return cell
         case .custom:
@@ -346,9 +351,7 @@ UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
     }
 
     open func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        if self.allowDelete{
-            (cell as? MessageContentCell)?.layoutMessageContainerView(with: messagesCollectionView.layoutAttributesForItem(at: indexPath) as! MessagesCollectionViewLayoutAttributes)
-        }
+
         guard let cell = cell as? TypingIndicatorCell else { return }
         cell.typingBubble.startAnimating()
     }
@@ -374,14 +377,10 @@ UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
         }
 
         let message = messagesDataSource.messageForItem(at: indexPath, in: messagesCollectionView)
-
-        switch message.kind {
-        case .text, .attributedText, .emoji, .photo:
-            selectedIndexPathForMenu = indexPath
-            return true
-        default:
-            return false
-        }
+        print(message.kind)
+        selectedIndexPathForMenu = indexPath
+        return true
+        
     }
 
     open func collectionView(_ collectionView: UICollectionView, canPerformAction action: Selector, forItemAt indexPath: IndexPath, withSender sender: Any?) -> Bool {
