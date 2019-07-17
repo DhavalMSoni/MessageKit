@@ -21,7 +21,7 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  SOFTWARE.
  */
-
+import UICircularProgressRing
 import Foundation
 import MapKit
 
@@ -171,7 +171,7 @@ public protocol MessagesDisplayDelegate: AnyObject {
     ///   - message: The `MessageType` that will be displayed by this cell.
     ///   - indexPath: The `IndexPath` of the cell.
     ///   - messagesCollectionView: The `MessagesCollectionView` in which this cell will be displayed.
-    func configureMediaMessageImageView(_ imageView: UIImageView, for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView)
+    func configureMediaMessageImageView(_ imageView: UIImageView, progressIndicator:UICircularProgressRing,for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView)
 
     // MARK: - Audio Message
     

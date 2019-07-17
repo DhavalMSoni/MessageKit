@@ -5,7 +5,7 @@
 //  Created by Nathan Tannar on 2019-04-05.
 //  Copyright © 2019 MessageKit. All rights reserved.
 //
-
+import UICircularProgressRing
 import UIKit
 import MessageKit
 import InputBarAccessoryView
@@ -282,6 +282,10 @@ extension AutocompleteExampleViewController: AutocompleteManagerDelegate, Autoco
 // MARK: - MessagesDisplayDelegate
 
 extension AutocompleteExampleViewController: MessagesDisplayDelegate {
+    func configureMediaMessageImageView(_ imageView: UIImageView, progressIndicator: UICircularProgressRing, for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) {
+        
+    }
+    
 
     // MARK: - Text Messages
 

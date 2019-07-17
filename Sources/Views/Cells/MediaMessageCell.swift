@@ -93,7 +93,6 @@ open class MediaMessageCell: MessageContentCell {
         default:
             break
         }
-
-        displayDelegate.configureMediaMessageImageView(imageView, for: message, at: indexPath, in: messagesCollectionView)
+displayDelegate.configureMediaMessageImageView(imageView, progressIndicator: prograssIndicator, for: message, at: indexPath, in: messagesCollectionView)
     }
 }

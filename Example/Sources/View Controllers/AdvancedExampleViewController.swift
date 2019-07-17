@@ -21,7 +21,7 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  SOFTWARE.
  */
-
+import UICircularProgressRing
 import UIKit
 import MapKit
 import MessageKit
@@ -342,6 +342,10 @@ layout?.setMessageIncomingMessageBottomLabelAlignment(LabelAlignment(textAlignme
 // MARK: - MessagesDisplayDelegate
 
 extension AdvancedExampleViewController: MessagesDisplayDelegate {
+    func configureMediaMessageImageView(_ imageView: UIImageView, progressIndicator: UICircularProgressRing, for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) {
+        
+    }
+    
 
     // MARK: - Text Messages
 
