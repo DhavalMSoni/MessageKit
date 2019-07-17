@@ -21,7 +21,7 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  SOFTWARE.
  */
-
+import UICircularProgressRing
 import UIKit
 
 /// A subclass of `MessageContentCell` used to display video and audio messages.
@@ -39,7 +39,19 @@ open class MediaMessageCell: MessageContentCell {
         imageView.contentMode = .scaleAspectFill
         return imageView
     }()
-
+    open var prograssIndicator:UICircularProgressRing = {
+        let progressRing = UICircularProgressRing()
+       
+        // Change any of the properties you'd like
+        progressRing.maxValue = 50
+        progressRing.startAngle = -90
+        progressRing.outerRingColor = .lightGray
+        progressRing.style = .ontop
+        progressRing.outerRingWidth = 5
+        progressRing.innerRingWidth = 5
+        progressRing.shouldShowValueText = false
+        return progressRing
+    }()
     // MARK: - Methods
 
     /// Responsible for setting up the constraints of the cell's subviews.
@@ -47,12 +59,15 @@ open class MediaMessageCell: MessageContentCell {
         imageView.fillSuperview()
         playButtonView.centerInSuperview()
         playButtonView.constraint(equalTo: CGSize(width: 35, height: 35))
+        prograssIndicator.centerInSuperview()
+        prograssIndicator.constraint(equalTo: CGSize(width: 50, height: 50))
     }
 
     open override func setupSubviews() {
         super.setupSubviews()
         messageContainerView.addSubview(imageView)
         messageContainerView.addSubview(playButtonView)
+        messageContainerView.addSubview(prograssIndicator)
         setupConstraints()
     }
     

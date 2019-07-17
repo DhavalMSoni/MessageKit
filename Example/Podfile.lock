@@ -2,6 +2,8 @@ PODS:
   - InputBarAccessoryView (4.2.2)
   - MessageKit (3.0.0):
     - InputBarAccessoryView (~> 4.2.2)
+    - UICircularProgressRing
+  - UICircularProgressRing (6.1.0)
 
 DEPENDENCIES:
   - MessageKit (from `../`)
@@ -9,6 +11,7 @@ DEPENDENCIES:
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
     - InputBarAccessoryView
+    - UICircularProgressRing
 
 EXTERNAL SOURCES:
   MessageKit:
@@ -16,7 +19,8 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   InputBarAccessoryView: 2b937602598e2fab3149f37f51dd7ad795653812
-  MessageKit: b776b77d6f589edca10abdc63b060b804c0de4f4
+  MessageKit: bc75e673eaf8aa6a00834dca34d08d7171329332
+  UICircularProgressRing: b3eba859a515e4d9d38503eec913f09c28450785
 
 PODFILE CHECKSUM: cecdb7bc8129cf99f66de9f68eea3256fec30c3d
 
