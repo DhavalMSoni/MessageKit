@@ -76,16 +76,14 @@ open class MediaMessageCell: MessageContentCell {
             //Pink color to set with your needs
             gradient.colors = [
                 UIColor.clear.cgColor,
-                UIColor.clear.cgColor,
-                UIColor.black.cgColor,
                 UIColor.black.cgColor,
                 ].compactMap { $0 }
             
             //You may have to change these values to your needs.
-            gradient.locations = [NSNumber(value: 0.0), NSNumber(value: 0.2), NSNumber(value: 0.8), NSNumber(value: 1.0)]
+            gradient.locations = [ NSNumber(value: 0.6), NSNumber(value: 1.0)]
             
             //From Upper Right to Bottom Left
-            gradient.startPoint = CGPoint(x: 0.8, y: 0.7)
+            gradient.startPoint = CGPoint(x: 0.9, y: 0.5)
             gradient.endPoint = CGPoint(x: 1, y: 1)
             
             //Apply
@@ -96,6 +94,7 @@ open class MediaMessageCell: MessageContentCell {
     open override func prepareForReuse() {
         super.prepareForReuse()
         self.imageView.image = nil
+        self.prograssIndicator.value = 0
     }
 
     open override func configure(with message: MessageType, at indexPath: IndexPath, and messagesCollectionView: MessagesCollectionView) {
