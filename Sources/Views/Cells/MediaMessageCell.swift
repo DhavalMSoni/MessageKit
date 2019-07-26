@@ -30,6 +30,7 @@ open class MediaMessageCell: MessageContentCell {
     /// The play button view to display on video messages.
     open lazy var playButtonView: PlayButtonView = {
         let playButtonView = PlayButtonView()
+        
         return playButtonView
     }()
 
@@ -37,6 +38,8 @@ open class MediaMessageCell: MessageContentCell {
     open var imageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
+        imageView.layer.cornerRadius = 15.0
+        imageView.clipsToBounds = true
         return imageView
     }()
     open var prograssIndicator:UICircularProgressRing = {
@@ -56,7 +59,7 @@ open class MediaMessageCell: MessageContentCell {
 
     /// Responsible for setting up the constraints of the cell's subviews.
     open func setupConstraints() {
-        imageView.fillSuperview()
+        imageView.fillSuperviewX()
         playButtonView.centerInSuperview()
         playButtonView.constraint(equalTo: CGSize(width: 35, height: 35))
         prograssIndicator.centerInSuperview()

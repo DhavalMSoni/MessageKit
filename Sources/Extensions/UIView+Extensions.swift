@@ -42,7 +42,21 @@ internal extension UIView {
     	    ]
 	    NSLayoutConstraint.activate(constraints)
     }
-
+    func fillSuperviewX() {
+        guard let superview = self.superview else {
+            return
+        }
+        translatesAutoresizingMaskIntoConstraints = false
+        
+        let constraints: [NSLayoutConstraint] = [
+            
+            leftAnchor.constraint(equalTo: superview.leftAnchor, constant: 5),
+            rightAnchor.constraint(equalTo: superview.rightAnchor, constant: -5),
+            topAnchor.constraint(equalTo: superview.topAnchor, constant: 5),
+            bottomAnchor.constraint(equalTo: superview.bottomAnchor, constant: -5)
+        ]
+        NSLayoutConstraint.activate(constraints)
+    }
     func centerInSuperview() {
         guard let superview = self.superview else {
             return
