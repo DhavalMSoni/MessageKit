@@ -30,6 +30,7 @@ open class MessageContentCell: MessageCollectionViewCell {
     /// The image view displaying the avatar.
     open var avatarView = AvatarView()
     open var allowDelete = false
+    
     /// The container used for styling and holding the message's content view.
     open var messageContainerView: MessageContainerView = {
         let containerView = MessageContainerView()
@@ -253,17 +254,29 @@ open class MessageContentCell: MessageCollectionViewCell {
         }
         
         let avatarPadding = attributes.avatarLeadingTrailingPadding
+        //        var xxx:CGFloat = 0.0
+        //        switch self.messageContainerView.style{
+        //        case .bubble:
+        //            xxx = 0.0
+        //        case .bubbleTail:
+        //            xxx = 5.0
+        //        default:
+        //            xxx = 0.0
+        //        }
+        //        attributes.messageContainerSize.width += xxx
         switch attributes.avatarPosition.horizontal {
         case .cellLeading:
             origin.x = attributes.avatarSize.width + attributes.messageContainerPadding.left + avatarPadding
             if self.allowDelete {
                 //                DispatchQueue.main.asyncAfter(deadline: .now()+1, execute: {
                 origin.x += 45
+                
                 UIView.animate(withDuration: 0.3) {
                     self.messageContainerView.frame = CGRect(origin: origin, size: attributes.messageContainerSize)
                 }
-              
+                
             }else{
+                
                 UIView.animate(withDuration: 0.3) {
                     
                     self.messageContainerView.frame = CGRect(origin: origin, size: attributes.messageContainerSize)
@@ -271,7 +284,12 @@ open class MessageContentCell: MessageCollectionViewCell {
             }
         case .cellTrailing:
             origin.x = attributes.frame.width - attributes.avatarSize.width - attributes.messageContainerSize.width - attributes.messageContainerPadding.right - avatarPadding
+            
+            
+            
             self.messageContainerView.frame = CGRect(origin: origin, size: attributes.messageContainerSize)
+            
+            
         case .natural:
             fatalError(MessageKitError.avatarPositionUnresolved)
         }
@@ -366,4 +384,5 @@ open class MessageContentCell: MessageCollectionViewCell {
         
     }
 }
+
 

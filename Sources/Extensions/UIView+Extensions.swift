@@ -33,27 +33,34 @@ internal extension UIView {
             return
         }
         translatesAutoresizingMaskIntoConstraints = false
-
-	    let constraints: [NSLayoutConstraint] = [
-    	    leftAnchor.constraint(equalTo: superview.leftAnchor),
-    	    rightAnchor.constraint(equalTo: superview.rightAnchor),
-    	    topAnchor.constraint(equalTo: superview.topAnchor),
-    	    bottomAnchor.constraint(equalTo: superview.bottomAnchor)
-    	    ]
-	    NSLayoutConstraint.activate(constraints)
+        
+        let constraints: [NSLayoutConstraint] = [
+            leftAnchor.constraint(equalTo: superview.leftAnchor),
+            rightAnchor.constraint(equalTo: superview.rightAnchor),
+            topAnchor.constraint(equalTo: superview.topAnchor),
+            bottomAnchor.constraint(equalTo: superview.bottomAnchor)
+        ]
+        NSLayoutConstraint.activate(constraints)
     }
-    func fillSuperviewX() {
+    func fillSuperviewX(superX:MessageContainerView,incomming:Bool) {
         guard let superview = self.superview else {
             return
         }
         translatesAutoresizingMaskIntoConstraints = false
-        
+        var xxx:CGFloat = 0.0
+        switch superX.style{
+        case .bubble:
+            xxx = -3.0
+        case .bubbleTail:
+            xxx = -7.0
+        default:
+            xxx = -3.0
+        }
         let constraints: [NSLayoutConstraint] = [
-            
-            leftAnchor.constraint(equalTo: superview.leftAnchor, constant: 5),
-            rightAnchor.constraint(equalTo: superview.rightAnchor, constant: -5),
-            topAnchor.constraint(equalTo: superview.topAnchor, constant: 5),
-            bottomAnchor.constraint(equalTo: superview.bottomAnchor, constant: -5)
+            leftAnchor.constraint(equalTo: superview.leftAnchor, constant: incomming ? -xxx : 3),
+            rightAnchor.constraint(equalTo: superview.rightAnchor, constant: incomming ? -3 : xxx ),
+            topAnchor.constraint(equalTo: superview.topAnchor, constant: 3),
+            bottomAnchor.constraint(equalTo: superview.bottomAnchor, constant: -3)
         ]
         NSLayoutConstraint.activate(constraints)
     }
@@ -79,7 +86,7 @@ internal extension UIView {
         NSLayoutConstraint.activate(constraints)
         
     }
-
+    
     @discardableResult
     internal func addConstraints(_ top: NSLayoutYAxisAnchor? = nil, left: NSLayoutXAxisAnchor? = nil, bottom: NSLayoutYAxisAnchor? = nil, right: NSLayoutXAxisAnchor? = nil, centerY: NSLayoutYAxisAnchor? = nil, centerX: NSLayoutXAxisAnchor? = nil, topConstant: CGFloat = 0, leftConstant: CGFloat = 0, bottomConstant: CGFloat = 0, rightConstant: CGFloat = 0, centerYConstant: CGFloat = 0, centerXConstant: CGFloat = 0, widthConstant: CGFloat = 0, heightConstant: CGFloat = 0) -> [NSLayoutConstraint] {
         
@@ -113,13 +120,13 @@ internal extension UIView {
             constraint.identifier = "right"
             constraints.append(constraint)
         }
-
+        
         if let centerY = centerY {
             let constraint = centerYAnchor.constraint(equalTo: centerY, constant: centerYConstant)
             constraint.identifier = "centerY"
             constraints.append(constraint)
         }
-
+        
         if let centerX = centerX {
             let constraint = centerXAnchor.constraint(equalTo: centerX, constant: centerXConstant)
             constraint.identifier = "centerX"
