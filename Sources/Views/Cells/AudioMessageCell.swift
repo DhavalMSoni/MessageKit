@@ -44,7 +44,7 @@ open class AudioMessageCell: MessageContentCell {
         progressRing.outerRingWidth = 3
         progressRing.innerRingWidth = 3
         progressRing.shouldShowValueText = false
-        progressRing.isHidden = true
+        progressRing.isHidden = true 
         return progressRing
     }()
     /// The time duration lable to display on audio messages.
