@@ -137,5 +137,17 @@ open class AudioMessageCell: MessageContentCell {
         if case let .audio(audioItem) = message.kind {
             durationLabel.text = displayDelegate.audioProgressTextFormat(audioItem.duration, for: self, in: messagesCollectionView)
         }
+        if message.isDownloaded{
+            let playImage = UIImage.messageKitImageWith(type: .play)
+            let pauseImage = UIImage.messageKitImageWith(type: .pause)
+            playButton.setImage(playImage?.withRenderingMode(.alwaysTemplate), for: .normal)
+            playButton.setImage(pauseImage?.withRenderingMode(.alwaysTemplate), for: .selected)
+        }else{
+            let downloadImage = UIImage.messageKitImageWith(type: .downloadAudio)
+            playButton.setImage(downloadImage?.withRenderingMode(.alwaysTemplate), for: .normal)
+            playButton.setImage(downloadImage?.withRenderingMode(.alwaysTemplate), for: .selected)
+        }
+        
+        
     }
 }

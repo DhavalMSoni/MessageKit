@@ -28,6 +28,7 @@ public enum ImageType: String {
     case disclouser
     case download
     case playArrow
+    case downloadAudio
 }
 
 import UIKit
