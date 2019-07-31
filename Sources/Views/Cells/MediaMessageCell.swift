@@ -66,7 +66,7 @@ open class MediaMessageCell: MessageContentCell {
         }
         
         playButtonView.centerInSuperview()
-        playButtonView.constraint(equalTo: CGSize(width: 35, height: 35))
+        playButtonView.constraint(equalTo: CGSize(width: 40, height: 40))
         prograssIndicator.centerInSuperview()
         prograssIndicator.constraint(equalTo: CGSize(width: 50, height: 50))
     }
@@ -117,7 +117,8 @@ open class MediaMessageCell: MessageContentCell {
         DispatchQueue.main.async {
             self.imageView.fillSuperviewX(superX: self.messageContainerView, incomming: messagesCollectionView.messagesDataSource?.currentSender().senderId == message.sender.senderId ? false : true)
         }
-        
+        playButtonView.isDownload = true
+        playButtonView.actionButton.setImage(#imageLiteral(resourceName: "download-arrow"), for: .normal)
         switch message.kind {
         case .photo(let mediaItem):
             imageView.image = mediaItem.image ?? mediaItem.placeholderImage

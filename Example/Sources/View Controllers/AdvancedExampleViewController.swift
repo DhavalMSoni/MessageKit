@@ -343,7 +343,7 @@ layout?.setMessageIncomingMessageBottomLabelAlignment(LabelAlignment(textAlignme
 
 extension AdvancedExampleViewController: MessagesDisplayDelegate {
     func configureMediaMessageImageView(_ imageView: UIImageView, progressIndicator: UICircularProgressRing, for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) {
-        
+        progressIndicator.isHidden = true
     }
     
 
@@ -470,6 +470,7 @@ extension AdvancedExampleViewController: MessagesDisplayDelegate {
 
     func configureAudioCell(_ cell: AudioMessageCell, message: MessageType) {
         audioController.configureAudioCell(cell, message: message) // this is needed especily when the cell is reconfigure while is playing sound
+        cell.prograssIndicator.isHidden = true
     }
     
 }

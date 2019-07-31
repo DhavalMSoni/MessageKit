@@ -21,7 +21,7 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  SOFTWARE.
  */
-
+import UICircularProgressRing
 import UIKit
 import AVFoundation
 
@@ -31,13 +31,21 @@ open class AudioMessageCell: MessageContentCell {
     /// The play button view to display on audio messages.
     public lazy var playButton: UIButton = {
         let playButton = UIButton(type: .custom)
-        let playImage = UIImage.messageKitImageWith(type: .play)
-        let pauseImage = UIImage.messageKitImageWith(type: .pause)
-        playButton.setImage(playImage?.withRenderingMode(.alwaysTemplate), for: .normal)
-        playButton.setImage(pauseImage?.withRenderingMode(.alwaysTemplate), for: .selected)
         return playButton
     }()
-
+    open var prograssIndicator:UICircularProgressRing = {
+        let progressRing = UICircularProgressRing()
+        
+        // Change any of the properties you'd like
+        progressRing.maxValue = 1
+        progressRing.startAngle = -90
+        progressRing.outerRingColor = .lightGray
+        progressRing.style = .ontop
+        progressRing.outerRingWidth = 3
+        progressRing.innerRingWidth = 3
+        progressRing.shouldShowValueText = false
+        return progressRing
+    }()
     /// The time duration lable to display on audio messages.
     public lazy var durationLabel: UILabel = {
         let durationLabel = UILabel(frame: CGRect.zero)
@@ -61,6 +69,8 @@ open class AudioMessageCell: MessageContentCell {
         playButton.addConstraints(left: messageContainerView.leftAnchor, centerY: messageContainerView.centerYAnchor, leftConstant: 5)
         durationLabel.addConstraints(right: messageContainerView.rightAnchor, centerY: messageContainerView.centerYAnchor, rightConstant: 15)
         progressView.addConstraints(left: playButton.rightAnchor, right: durationLabel.leftAnchor, centerY: messageContainerView.centerYAnchor, leftConstant: 5, rightConstant: 5)
+        prograssIndicator.constraint(equalTo: CGSize(width: 25, height: 25))
+        prograssIndicator.addConstraints(left: messageContainerView.leftAnchor, centerY: messageContainerView.centerYAnchor, leftConstant: 5)
     }
 
     open override func setupSubviews() {
@@ -68,6 +78,7 @@ open class AudioMessageCell: MessageContentCell {
         messageContainerView.addSubview(playButton)
         messageContainerView.addSubview(durationLabel)
         messageContainerView.addSubview(progressView)
+        messageContainerView.addSubview(prograssIndicator)
         setupConstraints()
     }
 
