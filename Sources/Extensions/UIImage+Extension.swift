@@ -27,6 +27,7 @@ public enum ImageType: String {
     case pause
     case disclouser
     case download
+    case playArrow
 }
 
 import UIKit

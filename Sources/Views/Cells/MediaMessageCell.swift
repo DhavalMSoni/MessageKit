@@ -121,10 +121,19 @@ open class MediaMessageCell: MessageContentCell {
         switch message.kind {
         case .photo(let mediaItem):
             imageView.image = mediaItem.image ?? mediaItem.placeholderImage
-            playButtonView.isHidden = true
+            playButtonView.isHidden = message.isDownloaded
+            playButtonView.isDownload = !message.isDownloaded
+            playButtonView.actionButton.setImage(UIImage.messageKitImageWith(type: .download), for: .normal)
+               
+         
+            
+            playButtonView.isHidden = message.isDownloaded
         case .video(let mediaItem):
-            imageView.image = mediaItem.image ?? mediaItem.placeholderImage
             playButtonView.isHidden = false
+            playButtonView.isDownload = !message.isDownloaded
+            imageView.image = mediaItem.image ?? mediaItem.placeholderImage
+            playButtonView.actionButton.setImage(message.isDownloaded ? UIImage.messageKitImageWith(type: .playArrow) : UIImage.messageKitImageWith(type: .download), for: .normal)
+            
         default:
             break
         }
