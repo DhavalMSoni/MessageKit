@@ -117,8 +117,7 @@ open class MediaMessageCell: MessageContentCell {
         DispatchQueue.main.async {
             self.imageView.fillSuperviewX(superX: self.messageContainerView, incomming: messagesCollectionView.messagesDataSource?.currentSender().senderId == message.sender.senderId ? false : true)
         }
-        playButtonView.isDownload = true
-        playButtonView.actionButton.setImage(#imageLiteral(resourceName: "download-arrow"), for: .normal)
+        
         switch message.kind {
         case .photo(let mediaItem):
             imageView.image = mediaItem.image ?? mediaItem.placeholderImage
