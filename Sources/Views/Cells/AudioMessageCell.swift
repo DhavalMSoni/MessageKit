@@ -44,6 +44,7 @@ open class AudioMessageCell: MessageContentCell {
         progressRing.outerRingWidth = 3
         progressRing.innerRingWidth = 3
         progressRing.shouldShowValueText = false
+        progressRing.isHidden = true
         return progressRing
     }()
     /// The time duration lable to display on audio messages.
@@ -87,6 +88,8 @@ open class AudioMessageCell: MessageContentCell {
         progressView.progress = 0
         playButton.isSelected = false
         durationLabel.text = "0:00"
+        prograssIndicator.value = 0.0
+        prograssIndicator.isHidden = true
     }
 
     /// Handle tap gesture on contentView and its subviews.
@@ -114,12 +117,14 @@ open class AudioMessageCell: MessageContentCell {
 
         let playButtonLeftConstraint = messageContainerView.constraints.filter { $0.identifier == "left" }.first
         let durationLabelRightConstraint = messageContainerView.constraints.filter { $0.identifier == "right" }.first
-
+        let progress = messageContainerView.constraints.filter { $0.identifier == "left" }[2]
         if !dataSource.isFromCurrentSender(message: message) {
             playButtonLeftConstraint?.constant = 12
+            progress.constant = 12
             durationLabelRightConstraint?.constant = -8
         } else {
             playButtonLeftConstraint?.constant = 5
+            progress.constant = 5
             durationLabelRightConstraint?.constant = -15
         }
 
