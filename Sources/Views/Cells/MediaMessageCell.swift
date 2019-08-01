@@ -126,7 +126,8 @@ open class MediaMessageCell: MessageContentCell {
         guard let displayDelegate = messagesCollectionView.messagesDisplayDelegate else {
             fatalError(MessageKitError.nilMessagesDisplayDelegate)
         }
-        updateMargin(superX: self.messageContainerView, incomming: self.messageContainerView, incomming: messagesCollectionView.messagesDataSource?.currentSender().senderId == message.sender.senderId ? false : true, margin: 3)
+        updateMargin(superX: self.messageContainerView, incomming: ( messagesCollectionView.messagesDataSource?.currentSender().senderId == message.sender.senderId ? false : true ), margin: 3.0)
+//        updateMargin(superX: self.messageContainerView, incomming: self.messageContainerView, incomming: ( messagesCollectionView.messagesDataSource?.currentSender().senderId == message.sender.senderId ? false : true ), margin: 3)
 //        DispatchQueue.main.async {
 //            self.imageView.fillSuperviewX(superX: self.messageContainerView, incomming: messagesCollectionView.messagesDataSource?.currentSender().senderId == message.sender.senderId ? false : true)
 //        }
