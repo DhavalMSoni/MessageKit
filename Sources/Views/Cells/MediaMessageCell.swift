@@ -55,21 +55,19 @@ open class MediaMessageCell: MessageContentCell {
         progressRing.shouldShowValueText = false
         return progressRing
     }()
+    let gradient = CAGradientLayer()
     // MARK: - Methods
     private var leftConstraint: NSLayoutConstraint?
     private var rightConstraint: NSLayoutConstraint?
     /// Responsible for setting up the constraints of the cell's subviews.
     open func setupConstraints() {
         
-        DispatchQueue.main.async {
-            
-            self.applyGradiant()
-        }
         fillSuperviewWithMargin(3)
         playButtonView.centerInSuperview()
         playButtonView.constraint(equalTo: CGSize(width: 40, height: 40))
         prograssIndicator.centerInSuperview()
         prograssIndicator.constraint(equalTo: CGSize(width: 50, height: 50))
+        
     }
     
     open override func setupSubviews() {
@@ -77,11 +75,14 @@ open class MediaMessageCell: MessageContentCell {
         messageContainerView.addSubview(imageView)
         messageContainerView.addSubview(playButtonView)
         messageContainerView.addSubview(prograssIndicator)
+        //Apply
         setupConstraints()
+        applyGradiant()
+        
         
     }
     func fillSuperviewWithMargin(_ margin: CGFloat) {
-       
+        
         imageView.translatesAutoresizingMaskIntoConstraints = false
         leftConstraint = imageView.leftAnchor.constraint(equalTo: messageContainerView.leftAnchor, constant: margin)
         rightConstraint = imageView.rightAnchor.constraint(equalTo: messageContainerView.rightAnchor, constant: -margin)
@@ -92,27 +93,27 @@ open class MediaMessageCell: MessageContentCell {
         NSLayoutConstraint.activate(constraints)
     }
     func applyGradiant()  {
+        
+        
+        self.gradient.frame = self.imageView.bounds
+        self.gradient.opacity = 0.5
+        //Pink color to set with your needs
+        self.gradient.colors = [
+            UIColor.clear.cgColor,
+            UIColor.black.cgColor,
+            ].compactMap { $0 }
+        
+        //You may have to change these values to your needs.
+        self.gradient.locations = [ NSNumber(value: 0.6), NSNumber(value: 1.0)]
+        
+        //From Upper Right to Bottom Left
+        self.gradient.startPoint = CGPoint(x: 0.9, y: 0.5)
+        self.gradient.endPoint = CGPoint(x: 1, y: 1)
         DispatchQueue.main.async {
-            
-            let gradient = CAGradientLayer()
-            gradient.frame = self.imageView.bounds
-            gradient.opacity = 0.5
-            //Pink color to set with your needs
-            gradient.colors = [
-                UIColor.clear.cgColor,
-                UIColor.black.cgColor,
-                ].compactMap { $0 }
-            
-            //You may have to change these values to your needs.
-            gradient.locations = [ NSNumber(value: 0.6), NSNumber(value: 1.0)]
-            
-            //From Upper Right to Bottom Left
-            gradient.startPoint = CGPoint(x: 0.9, y: 0.5)
-            gradient.endPoint = CGPoint(x: 1, y: 1)
-            
-            //Apply
-            self.imageView.layer.insertSublayer(gradient, at: 0)
+            self.imageView.layer.insertSublayer(self.gradient, at: 0)
         }
+        
+        
     }
     open override func prepareForReuse() {
         super.prepareForReuse()
@@ -127,10 +128,10 @@ open class MediaMessageCell: MessageContentCell {
             fatalError(MessageKitError.nilMessagesDisplayDelegate)
         }
         updateMargin(superX: self.messageContainerView, incomming: ( messagesCollectionView.messagesDataSource?.currentSender().senderId == message.sender.senderId ? false : true ), margin: 3.0)
-//        updateMargin(superX: self.messageContainerView, incomming: self.messageContainerView, incomming: ( messagesCollectionView.messagesDataSource?.currentSender().senderId == message.sender.senderId ? false : true ), margin: 3)
-//        DispatchQueue.main.async {
-//            self.imageView.fillSuperviewX(superX: self.messageContainerView, incomming: messagesCollectionView.messagesDataSource?.currentSender().senderId == message.sender.senderId ? false : true)
-//        }
+        //        updateMargin(superX: self.messageContainerView, incomming: self.messageContainerView, incomming: ( messagesCollectionView.messagesDataSource?.currentSender().senderId == message.sender.senderId ? false : true ), margin: 3)
+        //        DispatchQueue.main.async {
+        //            self.imageView.fillSuperviewX(superX: self.messageContainerView, incomming: messagesCollectionView.messagesDataSource?.currentSender().senderId == message.sender.senderId ? false : true)
+        //        }
         
         switch message.kind {
         case .photo(let mediaItem):
@@ -138,8 +139,8 @@ open class MediaMessageCell: MessageContentCell {
             playButtonView.isHidden = message.isDownloaded
             playButtonView.isDownload = !message.isDownloaded
             playButtonView.actionButton.setImage(UIImage.messageKitImageWith(type: .download), for: .normal)
-               
-         
+            
+            
             
             playButtonView.isHidden = message.isDownloaded
         case .video(let mediaItem):
@@ -154,7 +155,6 @@ open class MediaMessageCell: MessageContentCell {
         displayDelegate.configureMediaMessageImageView(imageView, progressIndicator: prograssIndicator, for: message, at: indexPath, in: messagesCollectionView)
     }
     func updateMargin(superX:MessageContainerView,incomming:Bool,margin:CGFloat) {
-        
         var xxx:CGFloat = 0.0
         switch superX.style{
         case .bubble:
@@ -166,6 +166,11 @@ open class MediaMessageCell: MessageContentCell {
         }
         leftConstraint?.constant = incomming ? -xxx : margin
         rightConstraint?.constant  = incomming ? -margin : xxx
-       
+        DispatchQueue.main.async {
+            
+            self.gradient.frame = self.imageView.bounds
+        }
+        
+        
     }
 }
