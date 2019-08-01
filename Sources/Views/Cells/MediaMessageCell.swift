@@ -56,7 +56,8 @@ open class MediaMessageCell: MessageContentCell {
         return progressRing
     }()
     // MARK: - Methods
-    
+    private var leftConstraint: NSLayoutConstraint?
+    private var rightConstraint: NSLayoutConstraint?
     /// Responsible for setting up the constraints of the cell's subviews.
     open func setupConstraints() {
         
@@ -64,7 +65,7 @@ open class MediaMessageCell: MessageContentCell {
             
             self.applyGradiant()
         }
-        
+        fillSuperviewWithMargin(3)
         playButtonView.centerInSuperview()
         playButtonView.constraint(equalTo: CGSize(width: 40, height: 40))
         prograssIndicator.centerInSuperview()
@@ -78,6 +79,17 @@ open class MediaMessageCell: MessageContentCell {
         messageContainerView.addSubview(prograssIndicator)
         setupConstraints()
         
+    }
+    func fillSuperviewWithMargin(_ margin: CGFloat) {
+       
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        leftConstraint = imageView.leftAnchor.constraint(equalTo: messageContainerView.leftAnchor, constant: margin)
+        rightConstraint = imageView.rightAnchor.constraint(equalTo: messageContainerView.rightAnchor, constant: -margin)
+        let top = imageView.topAnchor.constraint(equalTo: messageContainerView.topAnchor, constant: margin)
+        let bottom = imageView.bottomAnchor.constraint(equalTo: messageContainerView.bottomAnchor, constant: -margin)
+        let constraints: [NSLayoutConstraint] = [leftConstraint!,rightConstraint!,top,bottom]
+        
+        NSLayoutConstraint.activate(constraints)
     }
     func applyGradiant()  {
         DispatchQueue.main.async {
@@ -114,9 +126,10 @@ open class MediaMessageCell: MessageContentCell {
         guard let displayDelegate = messagesCollectionView.messagesDisplayDelegate else {
             fatalError(MessageKitError.nilMessagesDisplayDelegate)
         }
-        DispatchQueue.main.async {
-            self.imageView.fillSuperviewX(superX: self.messageContainerView, incomming: messagesCollectionView.messagesDataSource?.currentSender().senderId == message.sender.senderId ? false : true)
-        }
+        updateMargin(superX: self.messageContainerView, incomming: self.messageContainerView, incomming: messagesCollectionView.messagesDataSource?.currentSender().senderId == message.sender.senderId ? false : true, margin: 3)
+//        DispatchQueue.main.async {
+//            self.imageView.fillSuperviewX(superX: self.messageContainerView, incomming: messagesCollectionView.messagesDataSource?.currentSender().senderId == message.sender.senderId ? false : true)
+//        }
         
         switch message.kind {
         case .photo(let mediaItem):
@@ -138,5 +151,20 @@ open class MediaMessageCell: MessageContentCell {
             break
         }
         displayDelegate.configureMediaMessageImageView(imageView, progressIndicator: prograssIndicator, for: message, at: indexPath, in: messagesCollectionView)
+    }
+    func updateMargin(superX:MessageContainerView,incomming:Bool,margin:CGFloat) {
+        
+        var xxx:CGFloat = 0.0
+        switch superX.style{
+        case .bubble:
+            xxx = -margin
+        case .bubbleTail:
+            xxx = -(margin+4)
+        default:
+            xxx = -margin
+        }
+        leftConstraint?.constant = incomming ? -xxx : margin
+        rightConstraint?.constant  = incomming ? -margin : xxx
+       
     }
 }
