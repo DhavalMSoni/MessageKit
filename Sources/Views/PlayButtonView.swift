@@ -56,7 +56,6 @@ open class PlayButtonView: UIView {
         
         guard !cacheFrame.equalTo(frame) else { return }
         cacheFrame = frame
-        updateTriangleConstraints()
 
         applyCornerRadius()
 
@@ -81,7 +80,6 @@ open class PlayButtonView: UIView {
          let centerY = actionButton.centerYAnchor.constraint(equalTo: centerYAnchor)
          let width = actionButton.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 1)
          let height = actionButton.heightAnchor.constraint(equalTo: heightAnchor, multiplier: 1)
-        triangleCenterXConstraint = centerX
          NSLayoutConstraint.activate([centerX, centerY, width, height])
         
         
@@ -89,9 +87,7 @@ open class PlayButtonView: UIView {
     }
 
 
-    private func updateTriangleConstraints() {
-        triangleCenterXConstraint?.constant = isDownload ? 0 : frame.width/18
-    }
+   
     private func applyCornerRadius() {
         layer.cornerRadius = frame.width / 2
     }

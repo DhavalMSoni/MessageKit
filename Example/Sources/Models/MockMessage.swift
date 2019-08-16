@@ -103,7 +103,7 @@ internal struct MockMessage: MessageType {
         self.messageId = messageId
         self.sentDate = date
     }
-    var isDownloaded = false
+    var isDownloaded = true
     init(custom: Any?, user: MockUser, messageId: String, date: Date) {
         self.init(kind: .custom(custom), user: user, messageId: messageId, date: date)
     }
