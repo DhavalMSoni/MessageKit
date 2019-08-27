@@ -164,9 +164,10 @@ open class MediaMessageCell: MessageContentCell {
         default:
             xxx = -margin
         }
-        leftConstraint?.constant = incomming ? -xxx : margin
-        rightConstraint?.constant  = incomming ? -margin : xxx
         DispatchQueue.main.async {
+            self.leftConstraint?.constant = incomming ? -xxx : margin
+            self.rightConstraint?.constant  = incomming ? -margin : xxx
+            self.layoutIfNeeded()
             
             self.gradient.frame = self.imageView.bounds
         }
